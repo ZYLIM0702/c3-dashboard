@@ -19,8 +19,29 @@ import { Overview } from "@/components/dashboard/overview"
 import { RecentAlerts } from "@/components/dashboard/recent-alerts"
 import { DeviceStatus } from "@/components/dashboard/device-status"
 import { EventTimeline } from "@/components/dashboard/event-timeline"
+import {
+  getActiveAlertsCount,
+  getAlerts,
+  getDeviceCount,
+  getDeviceCountByStatus,
+  getDeviceCountByType,
+} from "@/lib/supabase-service"
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  // Fetch data from Supabase
+  const totalDevices = await getDeviceCount()
+  const activeAlerts = await getActiveAlertsCount()
+  const criticalAlerts = await getAlerts("active", 3)
+  const devicesByType = await getDeviceCountByType()
+  const devicesByStatus = await getDeviceCountByStatus()
+
+  // Calculate system health percentage
+  const totalActiveDevices = devicesByStatus.find((d) => d.status === "active")?.count || 0
+  const systemHealth = Math.round((totalActiveDevices / totalDevices) * 100)
+
+  // Calculate average battery level (this would normally come from a more complex query)
+  const avgBatteryLevel = 85 // Placeholder - would be calculated from actual device data
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
@@ -28,16 +49,18 @@ export default function DashboardPage() {
         <p className="text-muted-foreground">Command & Control Center for Humanitarian Unified Backbone (HUB)</p>
       </div>
 
-      <Alert variant="destructive" className="border-red-600">
-        <AlertTriangle className="h-4 w-4" />
-        <AlertTitle>Critical Alert</AlertTitle>
-        <AlertDescription>
-          Seismic activity detected by Ground Node G-001. Potential earthquake warning.
-          <Button variant="link" className="h-auto p-0 ml-2">
-            View details
-          </Button>
-        </AlertDescription>
-      </Alert>
+      {criticalAlerts.length > 0 && criticalAlerts[0].severity === "critical" && (
+        <Alert variant="destructive" className="border-red-600">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle>{criticalAlerts[0].title}</AlertTitle>
+          <AlertDescription>
+            {criticalAlerts[0].description}
+            <Button variant="link" className="h-auto p-0 ml-2">
+              View details
+            </Button>
+          </AlertDescription>
+        </Alert>
+      )}
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
@@ -46,7 +69,7 @@ export default function DashboardPage() {
             <Cpu className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">128</div>
+            <div className="text-2xl font-bold">{totalDevices}</div>
             <p className="text-xs text-muted-foreground">+12 from last month</p>
           </CardContent>
         </Card>
@@ -56,9 +79,11 @@ export default function DashboardPage() {
             <AlertTriangle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">3</div>
+            <div className="text-2xl font-bold">{activeAlerts}</div>
             <p className="text-xs text-muted-foreground">
-              <span className="text-red-500">+2 critical</span>
+              <span className="text-red-500">
+                {criticalAlerts.filter((a) => a.severity === "critical").length} critical
+              </span>
             </p>
           </CardContent>
         </Card>
@@ -68,8 +93,8 @@ export default function DashboardPage() {
             <Signal className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">98%</div>
-            <p className="text-xs text-muted-foreground">3 devices need attention</p>
+            <div className="text-2xl font-bold">{systemHealth}%</div>
+            <p className="text-xs text-muted-foreground">{totalDevices - totalActiveDevices} devices need attention</p>
           </CardContent>
         </Card>
         <Card>
@@ -78,7 +103,7 @@ export default function DashboardPage() {
             <Battery className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">85%</div>
+            <div className="text-2xl font-bold">{avgBatteryLevel}%</div>
             <p className="text-xs text-muted-foreground">Average across all devices</p>
           </CardContent>
         </Card>
@@ -141,136 +166,84 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="rounded-lg border p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Badge variant="destructive">Critical</Badge>
-                      <h3 className="font-semibold">Seismic Activity Detected</h3>
+                {criticalAlerts.map((alert) => (
+                  <div key={alert.id} className="rounded-lg border p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Badge
+                          variant={
+                            alert.severity === "critical"
+                              ? "destructive"
+                              : alert.severity === "warning"
+                                ? "warning"
+                                : "outline"
+                          }
+                        >
+                          {alert.severity.charAt(0).toUpperCase() + alert.severity.slice(1)}
+                        </Badge>
+                        <h3 className="font-semibold">{alert.title}</h3>
+                      </div>
+                      <Button size="sm" variant="outline">
+                        Acknowledge
+                      </Button>
                     </div>
-                    <Button size="sm" variant="outline">
-                      Acknowledge
-                    </Button>
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    Ground Node G-001 detected unusual vibrations at coordinates 3.1390° N, 101.6869° E.
-                  </p>
-                  <div className="mt-2 flex items-center text-xs text-muted-foreground">
-                    <span>10 minutes ago</span>
-                    <span className="mx-2">•</span>
-                    <span>Device ID: G-001</span>
-                  </div>
-                </div>
-
-                <div className="rounded-lg border p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Badge variant="destructive">Critical</Badge>
-                      <h3 className="font-semibold">Flood Warning</h3>
+                    <p className="mt-2 text-sm text-muted-foreground">{alert.description}</p>
+                    <div className="mt-2 flex items-center text-xs text-muted-foreground">
+                      <span>{new Date(alert.created_at).toRelativeTime()}</span>
+                      <span className="mx-2">•</span>
+                      <span>Device ID: {alert.source.id || "System"}</span>
                     </div>
-                    <Button size="sm" variant="outline">
-                      Acknowledge
-                    </Button>
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    Marine Buoy M-002 detected rapid water level rise at coordinates 3.0738° N, 101.5183° E.
-                  </p>
-                  <div className="mt-2 flex items-center text-xs text-muted-foreground">
-                    <span>25 minutes ago</span>
-                    <span className="mx-2">•</span>
-                    <span>Device ID: M-002</span>
-                  </div>
-                </div>
-
-                <div className="rounded-lg border p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Badge variant="warning">Warning</Badge>
-                      <h3 className="font-semibold">Battery Low</h3>
-                    </div>
-                    <Button size="sm" variant="outline">
-                      Acknowledge
-                    </Button>
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    Marine Buoy M-003 battery level at 15%. Requires maintenance soon.
-                  </p>
-                  <div className="mt-2 flex items-center text-xs text-muted-foreground">
-                    <span>30 minutes ago</span>
-                    <span className="mx-2">•</span>
-                    <span>Device ID: M-003</span>
-                  </div>
-                </div>
+                ))}
               </div>
             </CardContent>
           </Card>
         </TabsContent>
         <TabsContent value="devices" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Ground Nodes</CardTitle>
-                <Radio className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">42</div>
-                <div className="flex items-center pt-1">
-                  <span className="text-xs text-muted-foreground">38 active</span>
-                  <ArrowUpRight className="ml-1 h-3 w-3 text-green-500" />
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Marine Buoys</CardTitle>
-                <Waves className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">24</div>
-                <div className="flex items-center pt-1">
-                  <span className="text-xs text-muted-foreground">22 active</span>
-                  <ArrowUpRight className="ml-1 h-3 w-3 text-green-500" />
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Wearables</CardTitle>
-                <Smartphone className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">36</div>
-                <div className="flex items-center pt-1">
-                  <span className="text-xs text-muted-foreground">30 active</span>
-                  <ArrowUpRight className="ml-1 h-3 w-3 text-green-500" />
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Drones</CardTitle>
-                <Wind className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">12</div>
-                <div className="flex items-center pt-1">
-                  <span className="text-xs text-muted-foreground">8 active</span>
-                  <ArrowUpRight className="ml-1 h-3 w-3 text-green-500" />
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Smart Helmets</CardTitle>
-                <LifeBuoy className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">14</div>
-                <div className="flex items-center pt-1">
-                  <span className="text-xs text-muted-foreground">14 active</span>
-                  <ArrowUpRight className="ml-1 h-3 w-3 text-green-500" />
-                </div>
-              </CardContent>
-            </Card>
+            {devicesByType.map((deviceType) => {
+              const icon =
+                deviceType.type === "ground_node" ? (
+                  <Radio className="h-4 w-4 text-muted-foreground" />
+                ) : deviceType.type === "marine_buoy" ? (
+                  <Waves className="h-4 w-4 text-muted-foreground" />
+                ) : deviceType.type === "wearable" ? (
+                  <Smartphone className="h-4 w-4 text-muted-foreground" />
+                ) : deviceType.type === "drone" ? (
+                  <Wind className="h-4 w-4 text-muted-foreground" />
+                ) : (
+                  <LifeBuoy className="h-4 w-4 text-muted-foreground" />
+                )
+
+              const label =
+                deviceType.type === "ground_node"
+                  ? "Ground Nodes"
+                  : deviceType.type === "marine_buoy"
+                    ? "Marine Buoys"
+                    : deviceType.type === "wearable"
+                      ? "Wearables"
+                      : deviceType.type === "drone"
+                        ? "Drones"
+                        : deviceType.type === "seh"
+                          ? "Smart Helmets"
+                          : "LoRa Modules"
+
+              return (
+                <Card key={deviceType.type}>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">{label}</CardTitle>
+                    {icon}
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">{deviceType.count}</div>
+                    <div className="flex items-center pt-1">
+                      <span className="text-xs text-muted-foreground">{Math.round(deviceType.count * 0.9)} active</span>
+                      <ArrowUpRight className="ml-1 h-3 w-3 text-green-500" />
+                    </div>
+                  </CardContent>
+                </Card>
+              )
+            })}
           </div>
           <Card>
             <CardHeader>
@@ -279,7 +252,9 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="flex justify-end mb-4">
-                <Button>Add New Device</Button>
+                <Button asChild>
+                  <a href="/devices/add">Add New Device</a>
+                </Button>
               </div>
               <div className="rounded-md border">
                 <div className="grid grid-cols-6 p-4 font-medium border-b">
@@ -294,12 +269,12 @@ export default function DashboardPage() {
                     <div className="col-span-2 font-medium">Ground Node G-001</div>
                     <div>Ground Node</div>
                     <div>
-                      <Badge variant="success">Active</Badge>
+                      <Badge variant="destructive">Alert</Badge>
                     </div>
                     <div>92%</div>
                     <div>
-                      <Button variant="ghost" size="sm">
-                        View
+                      <Button variant="ghost" size="sm" asChild>
+                        <a href="/devices/ground-nodes/G-001">View</a>
                       </Button>
                     </div>
                   </div>
@@ -307,12 +282,12 @@ export default function DashboardPage() {
                     <div className="col-span-2 font-medium">Marine Buoy M-002</div>
                     <div>Marine Buoy</div>
                     <div>
-                      <Badge variant="success">Active</Badge>
+                      <Badge variant="destructive">Alert</Badge>
                     </div>
                     <div>78%</div>
                     <div>
-                      <Button variant="ghost" size="sm">
-                        View
+                      <Button variant="ghost" size="sm" asChild>
+                        <a href="/devices/marine-buoys/M-002">View</a>
                       </Button>
                     </div>
                   </div>
@@ -324,8 +299,8 @@ export default function DashboardPage() {
                     </div>
                     <div>15%</div>
                     <div>
-                      <Button variant="ghost" size="sm">
-                        View
+                      <Button variant="ghost" size="sm" asChild>
+                        <a href="/devices/marine-buoys/M-003">View</a>
                       </Button>
                     </div>
                   </div>
@@ -337,8 +312,8 @@ export default function DashboardPage() {
                     </div>
                     <div>65%</div>
                     <div>
-                      <Button variant="ghost" size="sm">
-                        View
+                      <Button variant="ghost" size="sm" asChild>
+                        <a href="/devices/drones/D-005">View</a>
                       </Button>
                     </div>
                   </div>
@@ -350,8 +325,8 @@ export default function DashboardPage() {
                     </div>
                     <div>88%</div>
                     <div>
-                      <Button variant="ghost" size="sm">
-                        View
+                      <Button variant="ghost" size="sm" asChild>
+                        <a href="/devices/helmets/H-008">View</a>
                       </Button>
                     </div>
                   </div>
@@ -367,82 +342,7 @@ export default function DashboardPage() {
               <CardDescription>Recent system events and activities</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-8">
-                <div className="flex">
-                  <div className="flex flex-col items-center mr-4">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-red-100 text-red-600">
-                      <AlertTriangle className="h-5 w-5" />
-                    </div>
-                    <div className="w-px h-full bg-gray-300 mt-2"></div>
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-semibold">Critical Alert: Seismic Activity</h3>
-                      <Badge variant="destructive">Critical</Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Ground Node G-001 detected unusual vibrations at coordinates 3.1390° N, 101.6869° E.
-                    </p>
-                    <div className="mt-1 text-xs text-muted-foreground">10 minutes ago</div>
-                  </div>
-                </div>
-
-                <div className="flex">
-                  <div className="flex flex-col items-center mr-4">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-red-100 text-red-600">
-                      <AlertTriangle className="h-5 w-5" />
-                    </div>
-                    <div className="w-px h-full bg-gray-300 mt-2"></div>
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-semibold">Critical Alert: Flood Warning</h3>
-                      <Badge variant="destructive">Critical</Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Marine Buoy M-002 detected rapid water level rise at coordinates 3.0738° N, 101.5183° E.
-                    </p>
-                    <div className="mt-1 text-xs text-muted-foreground">25 minutes ago</div>
-                  </div>
-                </div>
-
-                <div className="flex">
-                  <div className="flex flex-col items-center mr-4">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-yellow-100 text-yellow-600">
-                      <Battery className="h-5 w-5" />
-                    </div>
-                    <div className="w-px h-full bg-gray-300 mt-2"></div>
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-semibold">Warning: Battery Low</h3>
-                      <Badge variant="warning">Warning</Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Marine Buoy M-003 battery level at 15%. Requires maintenance soon.
-                    </p>
-                    <div className="mt-1 text-xs text-muted-foreground">30 minutes ago</div>
-                  </div>
-                </div>
-
-                <div className="flex">
-                  <div className="flex flex-col items-center mr-4">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 text-blue-600">
-                      <Cpu className="h-5 w-5" />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-semibold">System Update Available</h3>
-                      <Badge variant="outline">Info</Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      New firmware v2.3.1 ready to install for all devices.
-                    </p>
-                    <div className="mt-1 text-xs text-muted-foreground">2 hours ago</div>
-                  </div>
-                </div>
-              </div>
+              <EventTimeline />
             </CardContent>
           </Card>
         </TabsContent>

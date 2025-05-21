@@ -1,15 +1,54 @@
 "use client"
 
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts"
-
-const data = [
-  { name: "Active", value: 112, color: "#22c55e" },
-  { name: "Warning", value: 8, color: "#f59e0b" },
-  { name: "Offline", value: 5, color: "#6b7280" },
-  { name: "Critical", value: 3, color: "#ef4444" },
-]
+import { useEffect, useState } from "react"
+import { getDeviceCountByStatus } from "@/lib/supabase-service"
 
 export function DeviceStatus() {
+  const [data, setData] = useState([
+    { name: "Active", value: 0, color: "#22c55e" },
+    { name: "Warning", value: 0, color: "#f59e0b" },
+    { name: "Offline", value: 0, color: "#6b7280" },
+    { name: "Alert", value: 0, color: "#ef4444" },
+  ])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const statusCounts = await getDeviceCountByStatus()
+
+        const newData = [
+          {
+            name: "Active",
+            value: statusCounts.find((s) => s.status === "active")?.count || 0,
+            color: "#22c55e",
+          },
+          {
+            name: "Warning",
+            value: statusCounts.find((s) => s.status === "warning")?.count || 0,
+            color: "#f59e0b",
+          },
+          {
+            name: "Offline",
+            value: statusCounts.find((s) => s.status === "offline")?.count || 0,
+            color: "#6b7280",
+          },
+          {
+            name: "Alert",
+            value: statusCounts.find((s) => s.status === "alert")?.count || 0,
+            color: "#ef4444",
+          },
+        ]
+
+        setData(newData)
+      } catch (error) {
+        console.error("Error fetching device status data:", error)
+      }
+    }
+
+    fetchData()
+  }, [])
+
   return (
     <div className="h-[300px] w-full">
       <ResponsiveContainer width="100%" height="100%">
