@@ -22,6 +22,7 @@ import {
 import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import Link from "next/link"
+import { GoogleMap } from "@/components/google-map"
 
 // Sample data for sensor readings
 const sensorData = [
@@ -223,9 +224,17 @@ export default function DeviceDetailsPage() {
                 <CardDescription>Current device location</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-[200px] w-full rounded-md bg-muted flex items-center justify-center">
-                  <p className="text-muted-foreground">Map visualization would be displayed here</p>
-                </div>
+                <GoogleMap
+                  height="200px"
+                  center={{ lat: deviceInfo.location.latitude, lng: deviceInfo.location.longitude }}
+                  zoom={15}
+                  markers={[
+                    {
+                      position: { lat: deviceInfo.location.latitude, lng: deviceInfo.location.longitude },
+                      title: deviceInfo.name,
+                    },
+                  ]}
+                />
                 <div className="mt-4 grid grid-cols-2 gap-4">
                   <div>
                     <h3 className="text-sm font-medium text-muted-foreground">Coordinates</h3>

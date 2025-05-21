@@ -21,11 +21,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Google Maps API with visualization library for heatmaps */}
         <script
-          src={`https://maps.googleapis.com/maps/api/js?key=AIzaSyDW0w95X7Pjbv715Stxz_Jvul4x4AxEilU&libraries=places`}
-          async
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDW0w95X7Pjbv715Stxz_Jvul4x4AxEilU&libraries=places,visualization&loading=async"
           defer
         />
+        {/* MarkerClusterer for Google Maps */}
+        <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js" defer />
       </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

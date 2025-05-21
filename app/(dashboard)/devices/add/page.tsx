@@ -15,6 +15,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Switch } from "@/components/ui/switch"
 import { createDevice } from "@/lib/supabase-service"
+import { GoogleMap } from "@/components/google-map"
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -40,6 +41,7 @@ export default function AddDevicePage() {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [activeTab, setActiveTab] = useState("basic")
+  const [selectedLocation, setSelectedLocation] = useState({ lat: 3.139, lng: 101.6869 })
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -298,9 +300,20 @@ export default function AddDevicePage() {
                     )}
                   />
 
-                  <div className="h-[300px] w-full rounded-md bg-muted flex items-center justify-center">
-                    <p className="text-muted-foreground">Map visualization would be displayed here</p>
-                  </div>
+                  <GoogleMap
+                    height="300px"
+                    center={selectedLocation}
+                    zoom={12}
+                    markers={[{ position: selectedLocation }]}
+                    onClick={(e) => {
+                      const latLng = e.latLng?.toJSON()
+                      if (latLng) {
+                        setSelectedLocation(latLng)
+                        form.setValue("latitude", latLng.lat)
+                        form.setValue("longitude", latLng.lng)
+                      }
+                    }}
+                  />
                 </CardContent>
               </Card>
             </TabsContent>
