@@ -325,6 +325,20 @@ export async function getTeams() {
   return data as Team[]
 }
 
+export async function updateTeam(id: string, updates: Partial<Team>) {
+  const supabase = getSupabaseClient()
+  const { data, error } = await supabase.from("teams").update(updates).eq("id", id).select()
+  if (error) throw error
+  return data[0] as Team
+}
+
+export async function deleteTeam(id: string) {
+  const supabase = getSupabaseClient()
+  const { error } = await supabase.from("teams").delete().eq("id", id)
+  if (error) throw error
+  return true
+}
+
 // Deployments
 export async function getDeployments(status?: Deployment["status"]) {
   const supabase = getSupabaseClient()

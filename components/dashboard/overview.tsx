@@ -88,7 +88,7 @@ export function Overview() {
   }, [])
 
   if (loading) {
-    return <div className="h-[300px] flex items-center justify-center">Loading sensor data...</div>
+    return <div className="h-[100%] flex items-center justify-center">Loading sensor data...</div>
   }
 
   return (
@@ -109,7 +109,7 @@ export function Overview() {
             color: "hsl(var(--chart-3))",
           },
         }}
-        className="h-[300px]"
+        className="h-[300px] w-full"
       >
         <ResponsiveContainer width="100%" height="100%">
           <LineChart

@@ -170,16 +170,6 @@ export function Sidebar({ className }: SidebarProps) {
               <Settings className="h-4 w-4" />
               Settings
             </Link>
-            <Link
-              href="/database"
-              className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all hover:text-primary",
-                pathname === "/database" ? "bg-muted text-primary" : "text-muted-foreground",
-              )}
-            >
-              <Database className="h-4 w-4" />
-              Database
-            </Link>
           </div>
         </div>
       </div>

@@ -163,8 +163,7 @@ export default function MapPage() {
                 zoom={12}
                 height="100%"
                 width="100%"
-                showHeatmap={showHeatmap}
-                heatmapData={heatmapData}
+                show3DBuildings={show3DBuildings}
                 selectedDeviceId={selectedDevice}
               />
             </CardContent>
@@ -202,14 +201,14 @@ export default function MapPage() {
                           <span className="font-medium">{device.name}</span>
                         </div>
                         <Badge
-                          variant={
+                          className={
                             device.status === "critical"
-                              ? "destructive"
+                              ? "bg-red-500 text-white"
                               : device.status === "warning"
-                                ? "warning"
+                                ? "bg-yellow-500 text-black"
                                 : device.status === "offline"
-                                  ? "outline"
-                                  : "success"
+                                  ? "bg-gray-300 text-gray-700"
+                                  : "bg-green-500 text-white"
                           }
                         >
                           {device.status.charAt(0).toUpperCase() + device.status.slice(1)}

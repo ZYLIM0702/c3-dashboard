@@ -107,6 +107,40 @@ export default async function DashboardPage() {
             <p className="text-xs text-muted-foreground">Average across all devices</p>
           </CardContent>
         </Card>
+        {/* Small OSM Map Card */}
+        <Card className="col-span-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Network Map</CardTitle>
+          </CardHeader>
+          <CardContent>
+                        <iframe
+                          src="https://www.openstreetmap.org/export/embed.html?bbox=101.6304%2C3.12749%2C101.7255%2C3.19802&amp;layer=transportmap"
+                          style={{ border: "1px solid black", width: "100%", height: 300, borderRadius: 8 }}
+                        ></iframe>
+          </CardContent>
+        </Card>
+        {/* Mesh Network */}
+        <Card className="col-span-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Mesh Network Globe</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-row gap-4 w-full justify-center">
+                          <iframe
+              src="https://globe.gl/example/random-arcs/index.html"
+              style={{ width: '50%', height: 300, border: 0, background: '#000000', borderRadius: 8 }}
+              allowFullScreen
+              title="3D Mesh Network Globe"
+            />
+                          <iframe
+              src="https://globe.gl/example/countries-population/"
+              style={{ width: '50%', height: 300, border: 0, background: '#000000', borderRadius: 8 }}
+              allowFullScreen
+              title="3D Mesh Network Globe"
+            />
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-4">
@@ -118,13 +152,15 @@ export default async function DashboardPage() {
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-            <Card className="lg:col-span-4">
+            <Card className="lg:col-span-4 h-full">
               <CardHeader>
                 <CardTitle>System Overview</CardTitle>
                 <CardDescription>Sensor readings and system metrics over time</CardDescription>
               </CardHeader>
-              <CardContent className="pl-2">
-                <Overview />
+              <CardContent className="flex-1 flex h-[400px] min-h-[400px] w-full p-0">
+                <div className="w-full h-full">
+                  <Overview />
+                </div>
               </CardContent>
             </Card>
             <Card className="lg:col-span-3">

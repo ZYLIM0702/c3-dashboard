@@ -229,7 +229,7 @@ export default function AnalyticsPage() {
                 <CardDescription>Seismic readings over the past 14 days</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-[300px]">
+                <div className="h-[100%]">
                   <ChartContainer
                     config={{
                       value: {
@@ -342,7 +342,7 @@ export default function AnalyticsPage() {
               <CardDescription>Comprehensive view of seismic readings across all ground nodes</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="h-[400px]">
+              <div className="h-[100%]">
                 <ChartContainer
                   config={{
                     value: {
@@ -399,7 +399,7 @@ export default function AnalyticsPage() {
               <CardDescription>Comprehensive view of water level readings across all marine buoys</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="h-[400px]">
+              <div className="h-[100%]">
                 <ChartContainer
                   config={{
                     value: {

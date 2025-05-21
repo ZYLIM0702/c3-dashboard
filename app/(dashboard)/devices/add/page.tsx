@@ -15,7 +15,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Switch } from "@/components/ui/switch"
 import { createDevice } from "@/lib/supabase-service"
-import { GoogleMap } from "@/components/google-map"
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -29,7 +28,7 @@ const formSchema = z.object({
   firmware_version: z.string().optional(),
   description: z.string().optional(),
   // SDK connection fields
-  use_sdk: z.boolean().default(false),
+  use_sdk: z.boolean().default(false).catch(false),
   sdk_key: z.string().optional(),
   sdk_endpoint: z.string().optional(),
   sdk_version: z.string().optional(),
@@ -298,21 +297,6 @@ export default function AddDevicePage() {
                         <FormMessage />
                       </FormItem>
                     )}
-                  />
-
-                  <GoogleMap
-                    height="300px"
-                    center={selectedLocation}
-                    zoom={12}
-                    markers={[{ position: selectedLocation }]}
-                    onClick={(e) => {
-                      const latLng = e.latLng?.toJSON()
-                      if (latLng) {
-                        setSelectedLocation(latLng)
-                        form.setValue("latitude", latLng.lat)
-                        form.setValue("longitude", latLng.lng)
-                      }
-                    }}
                   />
                 </CardContent>
               </Card>

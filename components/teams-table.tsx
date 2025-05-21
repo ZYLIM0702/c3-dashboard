@@ -25,6 +25,7 @@ export function TeamsTable() {
   const { toast } = useToast()
   const [teams, setTeams] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchTeams = async () => {
@@ -46,6 +47,33 @@ export function TeamsTable() {
 
     fetchTeams()
   }, [toast])
+
+  const handleDelete = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this team? This action cannot be undone.")) return
+    setDeletingId(id)
+    try {
+      const supabaseService = new SupabaseService()
+      await supabaseService.deleteTeam(id)
+      setTeams((prev) => prev.filter((t) => t.id !== id))
+      toast({
+        title: "Team deleted",
+        description: "The team has been deleted successfully.",
+      })
+    } catch (error) {
+      console.error("Error deleting team:", error)
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to delete team. Please try again.",
+      })
+    } finally {
+      setDeletingId(null)
+    }
+  }
+
+  const handleEdit = (id: string) => {
+    router.push(`/teams/${id}/edit`)
+  }
 
   if (loading) {
     return (
@@ -122,9 +150,13 @@ export function TeamsTable() {
                         <DropdownMenuItem onClick={() => router.push(`/teams/${team.id}`)}>
                           View Details
                         </DropdownMenuItem>
-                        <DropdownMenuItem>Edit Team</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleEdit(team.id)}>
+                          Edit Team
+                        </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-destructive">Delete Team</DropdownMenuItem>
+                        <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(team.id)} disabled={deletingId === team.id}>
+                          {deletingId === team.id ? "Deleting..." : "Delete Team"}
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>

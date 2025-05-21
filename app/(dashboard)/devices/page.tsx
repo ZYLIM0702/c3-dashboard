@@ -16,7 +16,7 @@ export default async function DevicesPage() {
   return (
     <DashboardShell>
       <DashboardHeader heading="Devices" description="Manage and monitor all connected devices.">
-        <Link href="/devices/new">
+        <Link href="/devices/add">
           <Button>
             <PlusCircle className="mr-2 h-4 w-4" />
             Add Device
