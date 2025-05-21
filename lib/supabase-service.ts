@@ -149,16 +149,21 @@ export async function getSensors(deviceId?: string) {
 
 // Sensor Readings
 export async function getSensorReadings(sensorId: string, limit = 100) {
-  const supabase = getSupabaseClient()
-  const { data, error } = await supabase
-    .from("sensor_readings")
-    .select("*")
-    .eq("sensor_id", sensorId)
-    .order("timestamp", { ascending: false })
-    .limit(limit)
+  try {
+    const supabase = getSupabaseClient()
+    const { data, error } = await supabase
+      .from("sensor_readings")
+      .select("*")
+      .eq("sensor_id", sensorId)
+      .order("timestamp", { ascending: false })
+      .limit(limit)
 
-  if (error) throw error
-  return data as SensorReading[]
+    if (error) throw error
+    return data || []
+  } catch (error) {
+    console.error(`Error fetching sensor readings for sensor ${sensorId}:`, error)
+    return [] // Return empty array instead of throwing
+  }
 }
 
 export async function createSensorReading(reading: Omit<SensorReading, "id">) {
