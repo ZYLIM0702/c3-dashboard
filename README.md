@@ -1,46 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# C3 Dashboard
+
+A modern, open-source Next.js dashboard for device and network management, built for humanitarian and field operations. Features real-time device monitoring, map and mesh network visualizations, team and alert management, and seamless integration with Supabase.
+
+## Features
+
+- **Device Management**: Add, view, edit, and delete devices. Monitor device status, battery, and location.
+- **Team Management**: CRUD operations for teams, including leader assignment and member tracking.
+- **Alert & Event Management**: View, acknowledge, and resolve alerts. Track system events and incidents.
+- **Map & Mesh Network Visualization**: Embedded OpenStreetMap and 3D globe visualizations for network and device locations.
+- **Analytics & System Health**: Overview charts, device status breakdowns, and system health metrics.
+- **Supabase Integration**: Uses Supabase for authentication, database, and real-time data.
+- **Modern UI**: Built with Next.js App Router, Tailwind CSS, and Radix UI components. Fully responsive and dark mode ready.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- [Node.js](https://nodejs.org/) (v18+ recommended)
+- [pnpm](https://pnpm.io/) (or npm/yarn/bun)
+- [Supabase](https://supabase.com/) project (free tier is sufficient)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Local Development
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/c3-dashboard.git
+   cd c3-dashboard
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+2. **Install dependencies:**
+   ```bash
+   pnpm install
+   # or
+   npm install
+   # or
+   yarn install
+   # or
+   bun install
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. **Configure environment variables:**
+   Create a `.env.local` file in the project root:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+   Get these values from your Supabase project dashboard.
 
-## Learn More
+4. **Run the development server:**
+   ```bash
+   pnpm dev
+   # or npm run dev, yarn dev, bun dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Deploy on Vercel (Recommended)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Push your code to GitHub.**
+2. Go to [Vercel](https://vercel.com/new) and import your repository.
+3. Set the following environment variables in the Vercel dashboard:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+4. Click **Deploy**. Vercel will handle builds and hosting automatically.
 
-## Deploy on Vercel
+### Manual Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Docker:** (Optional, add Dockerfile if needed)
+- **Other platforms:** Any platform that supports Node.js and environment variables can run this dashboard.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Project Structure
 
-## Supabase Configuration
+- `app/` — Next.js App Router pages and layouts
+- `components/` — UI and dashboard components
+- `lib/` — Utility functions and Supabase service
+- `services/` — Client-side Supabase service
+- `public/` — Static assets
+- `styles/` — Global styles (Tailwind CSS)
 
-To use Supabase in your project, you need to create a `.env.local` file in the root of your project and add your Supabase URL and Anon Key. This file should not be committed to your version control as it contains sensitive information.
+## Contributing
 
-```
-# .env.local (create this file in your project root if it doesn't exist)
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
+Contributions are welcome! Please open issues or pull requests for bug fixes, features, or improvements.
+
+1. Fork the repo and create your branch: `git checkout -b feature/your-feature`
+2. Make your changes and commit: `git commit -m 'Add some feature'`
+3. Push to your fork: `git push origin feature/your-feature`
+4. Open a pull request on GitHub
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+**Made with ❤️ using Next.js, Supabase, and open-source tools.**
