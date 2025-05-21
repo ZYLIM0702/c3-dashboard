@@ -1,0 +1,7 @@
+name: c3_sdk_flutter
+version: 0.1.0
+description: HUB C3 Flutter SDK for device, telemetry, and video streaming integration.
+environment:
+  sdk: ">=2.17.0 <4.0.0"
+dependencies:
+  http: ^1.1.0

@@ -1,0 +1,14 @@
+<package format="2">
+  <name>hub_c3_ros</name>
+  <version>0.1.0</version>
+  <description>ROS wrapper for Hub C3 C++ SDK</description>
+  <maintainer email="dev@hub-c3.org">HUB C3 Team</maintainer>
+  <license>MIT</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+</package>

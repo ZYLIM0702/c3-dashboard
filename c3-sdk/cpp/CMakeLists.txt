@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.10)
+project(HubC3SDK)
+set(CMAKE_CXX_STANDARD 17)
+include_directories(include)
+add_library(hub_c3_sdk SHARED src/hub_client.cpp)
+install(TARGETS hub_c3_sdk DESTINATION lib)
+install(DIRECTORY include/ DESTINATION include)

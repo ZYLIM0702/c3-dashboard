@@ -1,0 +1,15 @@
+{
+  "name": "hub-c3-sdk",
+  "version": "0.1.0",
+  "description": "HUB C3 Node.js SDK",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/example.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
