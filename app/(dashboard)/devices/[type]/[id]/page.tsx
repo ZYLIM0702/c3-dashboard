@@ -22,7 +22,6 @@ import {
 import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import Link from "next/link"
-import { GoogleMap } from "@/components/google-map"
 
 // Sample data for sensor readings
 const sensorData = [
@@ -224,16 +223,11 @@ export default function DeviceDetailsPage() {
                 <CardDescription>Current device location</CardDescription>
               </CardHeader>
               <CardContent>
-                <GoogleMap
-                  height="200px"
-                  center={{ lat: deviceInfo.location.latitude, lng: deviceInfo.location.longitude }}
-                  zoom={15}
-                  markers={[
-                    {
-                      position: { lat: deviceInfo.location.latitude, lng: deviceInfo.location.longitude },
-                      title: deviceInfo.name,
-                    },
-                  ]}
+                {/* GoogleMap removed due to missing component. Use OSM iframe as fallback. */}
+                <iframe
+                  src={`https://www.openstreetmap.org/export/embed.html?bbox=${deviceInfo.location.longitude - 0.01}%2C${deviceInfo.location.latitude - 0.01}%2C${deviceInfo.location.longitude + 0.01}%2C${deviceInfo.location.latitude + 0.01}&amp;layer=mapnik`}
+                  style={{ border: "1px solid black", width: "100%", height: 200, borderRadius: 8 }}
+                  title="Device Location Map"
                 />
                 <div className="mt-4 grid grid-cols-2 gap-4">
                   <div>
