@@ -5,32 +5,32 @@
 
 ---
 
-## 🏆 UM Technothon 2025 — Team All Good
+## UM Technothon 2025 — Team All Good
 
 **Group Members:**  
 Lim Zi Yang, Liang Xinyu, Tang Jun Jie, Leow Jing Bang
 
 ---
 
-## 🚨 Abstract
+## Abstract
 
 Earthquakes and floods devastate communities, causing immense loss of life and economic damage. The Humanitarian Unified Backbone (HUB) is a modular, open-source ecosystem that unites sensors, wearables, drones, and mobile apps into a resilient, real-time network. Designed with stakeholder input, HUB ensures rapid alerts, seamless coordination, and enhanced situational awareness for governments, responders, and communities. Leveraging AI-driven analytics and a self-healing mesh network, HUB operates even in compromised environments—saving lives, curbing losses, and fostering resilience in disaster-prone regions.
 
 ---
 
-## 🌍 Introduction
+## Introduction
 
 Natural disasters strike with devastating force, exposing critical gaps in communication, early warning, and real-time data integration. HUB addresses these challenges with a resilient edge-to-cloud network, connecting field devices to a centralized Command & Control Center (C3) for real-time data flow and coordination—even when infrastructure is compromised.
 
 ---
 
-## ❓ Problem Statement
+## Problem Statement
 
 How can disaster response systems overcome the lack of data integration, real-time monitoring, communication breakdowns, and open-source accessibility to prevent catastrophic human, economic, and social tolls from earthquakes and floods?
 
 ---
 
-## 🎯 Objectives
+## Objectives
 
 1. **Develop a sustainable, modular, open-source ecosystem** for rapid, cost-effective disaster response.
 2. **Leverage AI-driven analytics and distributed sensor networks** for real-time, actionable alerts.
@@ -40,7 +40,7 @@ How can disaster response systems overcome the lack of data integration, real-ti
 
 ---
 
-## 🏗️ Scalable Architecture Overview
+## Scalable Architecture Overview
 
 ### Full Edge-to-Cloud, Modular, and Open-Source Design
 
@@ -55,7 +55,7 @@ How can disaster response systems overcome the lack of data integration, real-ti
 
 ---
 
-## 🧠 ML/AI Analytics Pipeline & Integration
+##ML/AI Analytics Pipeline & Integration
 
 - **Data Collection:** Real-time telemetry from all field devices (sensors, wearables, drones, helmets) ingested via edge and cloud brokers.
 - **Stream & Batch Processing:** Data flows through Kafka, processed in real-time (Flink/Spark) and batch (MLflow, custom models).
@@ -70,7 +70,7 @@ How can disaster response systems overcome the lack of data integration, real-ti
 
 ---
 
-## 🌐 Deployment Scenarios
+## Deployment Scenarios
 
 **Urban Earthquake Response:**  
 - Pre-event: SEH helmets, ground/marine nodes, drones, and C3 dashboard deployed.
@@ -84,7 +84,7 @@ How can disaster response systems overcome the lack of data integration, real-ti
 
 ---
 
-## 💡 Innovation
+## Innovation
 
 - **Universal SDK & Protocol Layer:** Open telemetry interface (MQTT, REST, LoRa) for instant onboarding of any device.
 - **Modular Hardware:** Self-registration, auto-discovery, and real-time streaming across mixed connectivity.
@@ -93,7 +93,7 @@ How can disaster response systems overcome the lack of data integration, real-ti
 
 ---
 
-## 📦 Monorepo Structure
+## Monorepo Structure
 
 ```
 c3-dashboard/
@@ -114,7 +114,7 @@ c3-dashboard/
 
 ---
 
-## 🛠️ Quick Start
+## Quick Start
 
 ### 1. Clone the Repository
 
@@ -151,7 +151,7 @@ uvicorn main:app --reload
 
 ---
 
-## 🌍 SDKs & Integrations
+## SDKs & Integrations
 
 - **Python, C++, Node.js, Flutter, ROS**: See each SDK’s README for installation and usage.
 - **Video Streaming**: Register and stream live video from field devices.
@@ -161,7 +161,7 @@ uvicorn main:app --reload
 
 ---
 
-## 🚦 Deployment
+## Deployment
 
 - **Frontend:** Vercel (recommended), Docker, or any Node.js host
 - **Backend:** Docker, server, or cloud (see backend/README.md)
@@ -169,7 +169,7 @@ uvicorn main:app --reload
 
 ---
 
-## 📖 Documentation
+## Documentation
 
 - [SDKs & API Reference](./c3-sdk/)
 - [Backend API](./c3-sdk/backend/README.md)
@@ -180,15 +180,9 @@ uvicorn main:app --reload
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
----
-
-## 📝 License
-
-MIT License. See [LICENSE](LICENSE) for details.
 
 ---
 
