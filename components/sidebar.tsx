@@ -66,12 +66,6 @@ export function Sidebar({ className }: SidebarProps) {
       active: pathname === "/map",
     },
     {
-      label: "Events",
-      icon: Calendar,
-      href: "/events",
-      active: pathname === "/events",
-    },
-    {
       label: "Teams",
       icon: Users,
       href: "/teams",

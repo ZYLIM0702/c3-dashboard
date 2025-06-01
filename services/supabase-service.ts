@@ -179,4 +179,107 @@ export class SupabaseService {
       throw error
     }
   }
+
+  // Telemetry methods
+  async getTelemetry() {
+    try {
+      const { data, error } = await this.supabase
+        .from("telemetry")
+        .select("*")
+        .order("timestamp", { ascending: false });
+      if (error) throw error;
+      return data || [];
+    } catch (error) {
+      console.error("Error fetching telemetry:", error);
+      throw error;
+    }
+  }
+
+  async getTelemetryByDeviceId(device_id: string) {
+    try {
+      const { data, error } = await this.supabase
+        .from("telemetry")
+        .select("*")
+        .eq("device_id", device_id)
+        .order("timestamp", { ascending: false });
+      if (error) throw error;
+      return data || [];
+    } catch (error) {
+      console.error("Error fetching telemetry by device_id:", error);
+      throw error;
+    }
+  }
+
+  async insertTelemetry(payload: Record<string, any>) {
+    try {
+      const { data, error } = await this.supabase
+        .from("telemetry")
+        .insert([payload])
+        .select();
+      if (error) throw error;
+      return data?.[0] || null;
+    } catch (error) {
+      console.error("Error inserting telemetry:", error);
+      throw error;
+    }
+  }
+
+  // Commands methods
+  async getCommands() {
+    try {
+      const { data, error } = await this.supabase
+        .from("commands")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data || [];
+    } catch (error) {
+      console.error("Error fetching commands:", error);
+      throw error;
+    }
+  }
+
+  async getCommandById(id: string) {
+    try {
+      const { data, error } = await this.supabase
+        .from("commands")
+        .select("*")
+        .eq("id", id)
+        .single();
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error("Error fetching command by id:", error);
+      throw error;
+    }
+  }
+
+  async insertCommand(payload: Record<string, any>) {
+    try {
+      const { data, error } = await this.supabase
+        .from("commands")
+        .insert([payload])
+        .select();
+      if (error) throw error;
+      return data?.[0] || null;
+    } catch (error) {
+      console.error("Error inserting command:", error);
+      throw error;
+    }
+  }
+
+  async updateCommandStatus(id: string, status: string) {
+    try {
+      const { data, error } = await this.supabase
+        .from("commands")
+        .update({ status, updated_at: new Date().toISOString() })
+        .eq("id", id)
+        .select();
+      if (error) throw error;
+      return data?.[0] || null;
+    } catch (error) {
+      console.error("Error updating command status:", error);
+      throw error;
+    }
+  }
 }

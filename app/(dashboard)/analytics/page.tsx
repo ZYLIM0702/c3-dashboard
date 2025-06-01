@@ -76,6 +76,7 @@ import * as cocoSsd from "@tensorflow-models/coco-ssd";
 import "@tensorflow/tfjs";
 import { ImageSegmenter, FilesetResolver } from "@mediapipe/tasks-vision";
 import { Switch } from "@/components/ui/switch";
+import ChangeDetection from '@/components/building-damage-detection';
 
 
 // Sample data for seismic activity over time
@@ -277,14 +278,8 @@ export default function AnalyticsPage() {
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="training">Model Training</TabsTrigger>
           <TabsTrigger value="simulation">Simulation</TabsTrigger>
+          <TabsTrigger value="building-damage">Building Damage Detection</TabsTrigger>
         </TabsList>
-
-        {/* Add camera access button at the top of the tabs */}
-        <div className="mb-4">
-          <Button onClick={requestCameraAccess} variant="outline">
-            Request Camera Access
-          </Button>
-        </div>
 
         <TabsContent value="overview">
           <div className="grid md:grid-cols-3 gap-4 mb-6">
@@ -722,7 +717,17 @@ export default function AnalyticsPage() {
         </TabsContent>
 
         <TabsContent value="simulation">
+          {/* Add camera access button at the top of the tabs */}
+        <div className="mb-4">
+          <Button onClick={requestCameraAccess} variant="outline">
+            Request Camera Access
+          </Button>
+        </div>
           <SimulationTab />
+        </TabsContent>
+
+        <TabsContent value="building-damage">
+          <ChangeDetection />
         </TabsContent>
       </Tabs>
     </div>
