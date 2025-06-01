@@ -175,8 +175,6 @@ uvicorn main:app --reload
 - [Backend API](./c3-sdk/backend/README.md)
 - [Supabase Schema](./c3-sdk/backend/README.md)
 - [Flutter SDK](./c3-sdk/flutter/README.md)
-- [UM Technothon 2025 Proposal (Full)](../UM_Technothon_2025_Proposal.pdf) *(see repo or attachments)*
-- [Pitching Video](https://youtu.be/8bwWCCXW1QM)
 
 ---
 
