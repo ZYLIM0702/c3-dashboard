@@ -279,6 +279,13 @@ export default function AnalyticsPage() {
           <TabsTrigger value="simulation">Simulation</TabsTrigger>
         </TabsList>
 
+        {/* Add camera access button at the top of the tabs */}
+        <div className="mb-4">
+          <Button onClick={requestCameraAccess} variant="outline">
+            Request Camera Access
+          </Button>
+        </div>
+
         <TabsContent value="overview">
           <div className="grid md:grid-cols-3 gap-4 mb-6">
                         <Card>
@@ -1584,3 +1591,20 @@ ctx.drawImage(
     </div>
   );
 };
+
+// Utility: Ask for camera access on button click
+function requestCameraAccess() {
+  if (typeof window !== 'undefined' && navigator.mediaDevices?.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then((stream) => {
+        // Optionally, do something with the stream or notify the user
+        alert('Camera access granted!');
+        // You can assign stream to a video element if needed
+      })
+      .catch((err) => {
+        alert('Camera access denied: ' + err.message);
+      });
+  } else {
+    alert('Camera access is not supported in this browser.');
+  }
+}
