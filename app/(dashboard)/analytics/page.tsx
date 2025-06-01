@@ -40,7 +40,22 @@ import {
 } from "recharts";
 import { useSpring, animated } from "react-spring";
 // Dynamically import MapContainer and related components to avoid SSR errors
-import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
+import dynamic from "next/dynamic";
+const MapContainer = dynamic(() => import("react-leaflet").then(mod => mod.MapContainer), {
+  ssr: false
+});
+const TileLayer = dynamic(() => import("react-leaflet").then(mod => mod.TileLayer), {
+  ssr: false
+});
+const Marker = dynamic(() => import("react-leaflet").then(mod => mod.Marker), {
+  ssr: false
+});
+const Popup = dynamic(() => import("react-leaflet").then(mod => mod.Popup), {
+  ssr: false
+});
+const Circle = dynamic(() => import("react-leaflet").then(mod => mod.Circle), {
+  ssr: false
+});
 import "leaflet/dist/leaflet.css";
 import {
   Mic,
@@ -886,34 +901,31 @@ function TrainingMetricsChart() {
 
 // SimulationTab component for the simulation tab
 const SimulationTab = () => {
-  // Use useRef to store icons and only initialize on client
-  const nodeIconRef = useRef<any>(null);
-  const triggeredIconRef = useRef<any>(null);
-  const droneIconRef = useRef<any>(null);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const leaflet = require("leaflet");
-      const LeafletIcon = (leaflet as any).Icon;
-      if (!LeafletIcon) throw new Error("Leaflet Icon class not found");
-      nodeIconRef.current = new LeafletIcon({
-        iconUrl: "https://cdn-icons-png.flaticon.com/512/6832/6832382.png",
-        iconSize: [41, 41],
-        iconAnchor: [16, 48],
-      });
-      triggeredIconRef.current = new LeafletIcon({
-        iconUrl: "https://cdn-icons-png.flaticon.com/512/4479/4479159.png",
-        iconSize: [41, 41],
-      });
-      droneIconRef.current = new LeafletIcon({
-        iconUrl:
-          "https://static-00.iconduck.com/assets.00/uav-quadcopter-icon-2048x2048-6cgkinkj.png",
-        iconSize: [20, 20],
-        iconAnchor: [24, 24],
-      });
-    }
-  }, []);
+  // Dynamically require Leaflet and get Icon from the module (with type safety)
+  let nodeIcon: any = undefined,
+    triggeredIcon: any = undefined,
+    droneIcon: any = undefined;
+  if (typeof window !== "undefined") {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const leaflet = require("leaflet");
+    const LeafletIcon = leaflet.Icon;
+    if (!LeafletIcon) throw new Error("Leaflet Icon class not found");
+    nodeIcon = new LeafletIcon({
+      iconUrl: "https://cdn-icons-png.flaticon.com/512/6832/6832382.png",
+      iconSize: [41, 41],
+      iconAnchor: [16, 48],
+    });
+    triggeredIcon = new LeafletIcon({
+      iconUrl: "https://cdn-icons-png.flaticon.com/512/4479/4479159.png",
+      iconSize: [41, 41],
+    });
+    droneIcon = new LeafletIcon({
+      iconUrl:
+        "https://static-00.iconduck.com/assets.00/uav-quadcopter-icon-2048x2048-6cgkinkj.png",
+      iconSize: [20, 20],
+      iconAnchor: [24, 24],
+    });
+  }
 
   const [nodes, setNodes] = useState(
     Array(25)
@@ -1404,7 +1416,7 @@ ctx.drawImage(
                 <Marker
                   key={node.id}
                   position={[node.lat, node.lng]}
-                  icon={node.triggered ? triggeredIconRef.current : nodeIconRef.current}
+                  icon={node.triggered ? triggeredIcon : nodeIcon}
                   eventHandlers={{
                     mouseover: () => setActiveNode(node.id),
                     mouseout: () => setActiveNode(null),
@@ -1456,7 +1468,7 @@ ctx.drawImage(
                 <Marker
                   key={drone.id}
                   position={drone.pos}
-                  icon={droneIconRef.current}
+                  icon={droneIcon}
                   eventHandlers={{
                     mouseover: () => setActiveDrone(drone.id),
                     mouseout: () => setActiveDrone(null),
