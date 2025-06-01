@@ -19,7 +19,7 @@ class C3Backend {
     );
   }
 
-  Future<Stream<Map<String, dynamic>>> streamData() async* {
+  Stream<Map<String, dynamic>> streamData() async* {
     // Simulate streaming (replace with WebSocket/MQTT in real impl)
     yield* Stream.empty();
   }
