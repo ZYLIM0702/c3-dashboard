@@ -69,43 +69,41 @@ export function DevicesTable({ filterType }: DevicesTableProps) {
     fetchDevices()
   }, [toast, filterType])
 
-  // Rest of the component remains the same...
-
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "active":
         return (
-          <Badge variant="outline" className="bg-green-50 text-green-700 capitalize">
+          <Badge className="bg-green-50 text-green-700 capitalize">
             {status}
           </Badge>
         )
       case "inactive":
         return (
-          <Badge variant="outline" className="bg-gray-50 text-gray-700 capitalize">
+          <Badge className="bg-gray-50 text-gray-700 capitalize">
             {status}
           </Badge>
         )
       case "maintenance":
         return (
-          <Badge variant="outline" className="bg-blue-50 text-blue-700 capitalize">
+          <Badge className="bg-blue-50 text-blue-700 capitalize">
             {status}
           </Badge>
         )
       case "alert":
         return (
-          <Badge variant="outline" className="bg-red-50 text-red-700 capitalize">
+          <Badge className="bg-red-50 text-red-700 capitalize">
             {status}
           </Badge>
         )
       case "offline":
         return (
-          <Badge variant="outline" className="bg-yellow-50 text-yellow-700 capitalize">
+          <Badge className="bg-yellow-50 text-yellow-700 capitalize">
             {status}
           </Badge>
         )
       default:
         return (
-          <Badge variant="outline" className="capitalize">
+          <Badge className="capitalize">
             {status}
           </Badge>
         )
@@ -124,7 +122,7 @@ export function DevicesTable({ filterType }: DevicesTableProps) {
     }
 
     return (
-      <Badge variant="secondary" className="capitalize">
+      <Badge className="capitalize">
         {typeMap[type] || type}
       </Badge>
     )
@@ -177,13 +175,14 @@ export function DevicesTable({ filterType }: DevicesTableProps) {
               <TableHead>Battery</TableHead>
               <TableHead>Signal</TableHead>
               <TableHead>Last Seen</TableHead>
+              <TableHead>ML Analytics</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {devices.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className="text-center">
+                <TableCell colSpan={8} className="text-center">
                   No devices found
                 </TableCell>
               </TableRow>
@@ -206,6 +205,20 @@ export function DevicesTable({ filterType }: DevicesTableProps) {
                     </div>
                   </TableCell>
                   <TableCell>{formatRelativeTime(device.last_seen)}</TableCell>
+                  <TableCell>
+                    {/* ML Analytics placeholder - replace with real data */}
+                    {device.ml_analytics ? (
+                      <Badge className={
+                        device.ml_analytics.risk_score > 0.7
+                          ? "bg-red-50 text-red-700"
+                          : "bg-green-50 text-green-700"
+                      }>
+                        {device.ml_analytics.label || `Risk: ${device.ml_analytics.risk_score}`}
+                      </Badge>
+                    ) : (
+                      <span className="text-xs text-muted-foreground">N/A</span>
+                    )}
+                  </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

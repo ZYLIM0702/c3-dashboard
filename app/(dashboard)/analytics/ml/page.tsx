@@ -41,7 +41,7 @@ import {
 import { useSpring, animated } from "react-spring";
 // Dynamically import MapContainer and related components to avoid SSR errors
 import dynamic from "next/dynamic";
-const DynamicMap = dynamic(() => import("./ml/MapSensingClient"), { ssr: false });
+const DynamicMap = dynamic(() => import("./MapSensingClient"), { ssr: false });
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import {
@@ -117,7 +117,7 @@ const sampleModels = [
 // const triggeredIcon = new L.Icon({ ... });
 // const droneIcon = new L.Icon({ ... });
 
-export default function AnalyticsPage() {
+export default function MachineLearningAnalyticsPage() {
   const [devices, setDevices] = useState<any[]>([]);
   const [mlResults, setMlResults] = useState<Record<string, any>>({});
   const [loading, setLoading] = useState(true);
