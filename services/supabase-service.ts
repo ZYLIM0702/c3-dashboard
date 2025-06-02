@@ -301,3 +301,23 @@ export async function uploadVideoToSupabase(file: File | Buffer, filename: strin
   if (!publicUrlData?.publicUrl) throw new Error("Failed to get public URL");
   return publicUrlData.publicUrl;
 }
+
+// This function is for client-side use only. It uploads a video file directly to Supabase Storage, bypassing Vercel serverless limits.
+export async function uploadVideoToSupabaseClient(file: File): Promise<string> {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
+  );
+  // Fallback to .mp4 if file.name is undefined or invalid
+  const originalName = file.name && file.name !== "undefined" ? file.name : `video.mp4`;
+  const filename = `${Date.now()}_${originalName}`;
+  const { data, error } = await supabase.storage.from("video").upload(filename, file, {
+    cacheControl: "3600",
+    upsert: true,
+    contentType: file.type || "video/mp4",
+  });
+  if (error) throw error;
+  const { data: publicUrlData } = supabase.storage.from("video").getPublicUrl(filename);
+  if (!publicUrlData?.publicUrl) throw new Error("Failed to get public URL");
+  return publicUrlData.publicUrl;
+}

@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { IncomingForm, File } from "formidable";
 import fs from "fs";
 import path from "path";
-import { uploadVideoToSupabase } from "../../services/supabase-service";
+import { uploadVideoToSupabaseClient } from "../../services/supabase-service";
 
 // Disable body parser to allow file streaming
 export const config = {
@@ -37,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const fileBuffer = fs.readFileSync(videoFile.filepath);
 
       // Upload video to Supabase and get public URL
-      const publicUrl = await uploadVideoToSupabase(fileBuffer, filename);
+      const publicUrl = await uploadVideoToSupabaseClient(fileBuffer,filename);
 
       // Make HTTP request to Replicate
       const response = await fetch("https://api.replicate.com/v1/predictions", {
