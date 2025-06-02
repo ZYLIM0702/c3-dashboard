@@ -5,6 +5,7 @@ export const config = {
     bodyParser: {
       sizeLimit: '100mb', // Increase the JSON body size limit to 4MB
     },
+    maxDuration: 60, // Increase Vercel serverless function timeout to 60 seconds (max for Pro/Enterprise)
   },
 };
 
