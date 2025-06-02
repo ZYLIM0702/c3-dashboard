@@ -1,19 +1,30 @@
 import React, { useState, useRef } from 'react';
 
+const PREDEFINED_IMAGE_1 =
+  'https://xuxxudtsqfdbchssrouw.supabase.co/storage/v1/object/public/video//2013.png';
+const PREDEFINED_IMAGE_2 =
+  'https://xuxxudtsqfdbchssrouw.supabase.co/storage/v1/object/public/video//2019.png';
+
 const ChangeDetection = () => {
-  const [image1, setImage1] = useState<string | null>(null);
-  const [image2, setImage2] = useState<string | null>(null);
+  const [image1, setImage1] = useState<string | null>(PREDEFINED_IMAGE_1);
+  const [image2, setImage2] = useState<string | null>(PREDEFINED_IMAGE_2);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
   const [threshold, setThreshold] = useState(76);
   const [sliderValue, setSliderValue] = useState(0.5); // For before/after slider
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>, setImage: (url: string) => void) => {
+  // Handle file upload for before/after
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, setImage: (url: string) => void) => {
     const file = e.target.files?.[0];
     if (file) {
-      const url = URL.createObjectURL(file);
-      setImage(url);
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        if (typeof ev.target?.result === 'string') {
+          setImage(ev.target.result);
+        }
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -81,39 +92,40 @@ const ChangeDetection = () => {
 
   return (
     <div className="min-h-screen p-8 bg-background text-foreground">
-
       <div className="flex flex-col md:flex-row gap-4 mb-4">
         <div className="flex-1 flex flex-col items-center">
           <label className="mb-1 text-sm text-muted-foreground">Before Disaster</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => handleUpload(e, setImage1)}
-            className="block w-full text-sm text-gray-100 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-muted file:text-foreground hover:file:bg-muted/80 transition"
-          />
-          {image1 && (
+          <div className="w-full flex flex-col items-center">
             <img
-              src={image1}
+              src={image1!}
               alt="Before Disaster"
               className="mt-2 rounded shadow border border-muted max-h-64 object-contain"
             />
-          )}
+            <input
+              type="file"
+              accept="image/*"
+              className="mt-2"
+              onChange={e => handleImageUpload(e, setImage1)}
+            />
+            <span className="text-xs text-muted-foreground mt-1">Upload or use sample</span>
+          </div>
         </div>
         <div className="flex-1 flex flex-col items-center">
           <label className="mb-1 text-sm text-muted-foreground">After Disaster</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => handleUpload(e, setImage2)}
-            className="block w-full text-sm text-gray-100 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-muted file:text-foreground hover:file:bg-muted/80 transition"
-          />
-          {image2 && (
+          <div className="w-full flex flex-col items-center">
             <img
-              src={image2}
+              src={image2!}
               alt="After Disaster"
               className="mt-2 rounded shadow border border-muted max-h-64 object-contain"
             />
-          )}
+            <input
+              type="file"
+              accept="image/*"
+              className="mt-2"
+              onChange={e => handleImageUpload(e, setImage2)}
+            />
+            <span className="text-xs text-muted-foreground mt-1">Upload or use sample</span>
+          </div>
         </div>
       </div>
 
@@ -145,14 +157,12 @@ const ChangeDetection = () => {
         )}
       </div>
 
-      {image1 && image2 && (
-        <button
-          onClick={detectChanges}
-          className="bg-primary text-primary-foreground px-4 py-2 rounded hover:bg-primary/90 transition font-semibold shadow"
-        >
-          {processing ? 'Processing...' : 'Detect Changes'}
-        </button>
-      )}
+      <button
+        onClick={detectChanges}
+        className="bg-primary text-primary-foreground px-4 py-2 rounded hover:bg-primary/90 transition font-semibold shadow"
+      >
+        {processing ? 'Processing...' : 'Detect Changes'}
+      </button>
 
       {processing && (
         <div className="mt-6 text-lg text-muted-foreground animate-pulse">Analyzing images...</div>
@@ -163,7 +173,7 @@ const ChangeDetection = () => {
       {resultUrl && image1 && image2 && (
         <div className="mt-6">
           <h2 className="text-xl font-semibold mb-2">Result (Changes Highlighted in Red)</h2>
-          <div className="relative w-full max-w-2xl mx-auto h-80 rounded overflow-hidden border border-muted shadow-lg bg-black">
+          <div className="relative w-full max-w-2xl mx-auto h-[500px] rounded overflow-hidden border border-muted shadow-lg bg-black">
             <div className="absolute inset-0">
               <img
                 src={image1}

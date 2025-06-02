@@ -77,6 +77,7 @@ import "@tensorflow/tfjs";
 import { ImageSegmenter, FilesetResolver } from "@mediapipe/tasks-vision";
 import { Switch } from "@/components/ui/switch";
 import ChangeDetection from '@/components/building-damage-detection';
+import HazardMappingTab from '@/components/ai-hazard-mapping';
 
 
 // Sample data for seismic activity over time
@@ -279,6 +280,7 @@ export default function AnalyticsPage() {
           <TabsTrigger value="training">Model Training</TabsTrigger>
           <TabsTrigger value="simulation">Simulation</TabsTrigger>
           <TabsTrigger value="building-damage">Building Damage Detection</TabsTrigger>
+          <TabsTrigger value="hazard-mapping">Hazard Mapping (AI)</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview">
@@ -727,7 +729,16 @@ export default function AnalyticsPage() {
         </TabsContent>
 
         <TabsContent value="building-damage">
+                              <div className="w-full">
           <ChangeDetection />
+          </div>
+        </TabsContent>
+
+        <TabsContent value="hazard-mapping">
+                    <div className="w-full">
+
+          <HazardMappingTab />
+          </div>
         </TabsContent>
       </Tabs>
     </div>

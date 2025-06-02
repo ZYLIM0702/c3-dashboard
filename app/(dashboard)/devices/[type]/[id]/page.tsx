@@ -263,6 +263,9 @@ export default function DeviceDetailsPage() {
           <TabsTrigger value="sensors">Sensors</TabsTrigger>
           <TabsTrigger value="alerts">Alerts</TabsTrigger>
           <TabsTrigger value="settings">Settings</TabsTrigger>
+          <TabsTrigger value="hazard-mapping" asChild>
+            <Link href="/analytics/hazard-mapping">Hazard Mapping (AI)</Link>
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
