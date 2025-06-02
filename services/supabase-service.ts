@@ -285,38 +285,20 @@ export class SupabaseService {
 }
 
 // Helper function to upload a video file to Supabase
-export async function uploadVideoToSupabase(file: File | Buffer, filename: string): Promise<string> {
+export async function uploadVideoToSupabase(file: File): Promise<string> {
   const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || "",
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || ""
-  );
-  const { data, error } = await supabase.storage.from("video").upload(filename, file, {
-    cacheControl: "3600",
-    upsert: true,
-    contentType: "video/mp4",
-  });
-  if (error) throw error;
-  // Get public URL
-  const { data: publicUrlData } = supabase.storage.from("video").getPublicUrl(filename);
-  if (!publicUrlData?.publicUrl) throw new Error("Failed to get public URL");
-  return publicUrlData.publicUrl;
-}
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
-// This function is for client-side use only. It uploads a video file directly to Supabase Storage, bypassing Vercel serverless limits.
-export async function uploadVideoToSupabaseClient(file: File): Promise<string> {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
-  );
-  // Fallback to .mp4 if file.name is undefined or invalid
-  const originalName = file.name && file.name !== "undefined" ? file.name : `video.mp4`;
-  const filename = `${Date.now()}_${originalName}`;
+  const filename = `${Date.now()}_${file.name}`;
   const { data, error } = await supabase.storage.from("video").upload(filename, file, {
     cacheControl: "3600",
     upsert: true,
-    contentType: file.type || "video/mp4",
+    contentType: file.type,
   });
   if (error) throw error;
+
   const { data: publicUrlData } = supabase.storage.from("video").getPublicUrl(filename);
   if (!publicUrlData?.publicUrl) throw new Error("Failed to get public URL");
   return publicUrlData.publicUrl;

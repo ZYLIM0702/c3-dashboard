@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { UploadCloud } from "lucide-react";
+import { uploadVideoToSupabase } from "@/services/supabase-service";
 
 const HazardMappingTab = () => {
   const [inputVideo, setInputVideo] = useState<File | null>(null);
@@ -36,35 +37,41 @@ const HazardMappingTab = () => {
   };
 
   // Handle prediction
-  const handlePredict = async () => {
-    setError("");
-    setLoading(true);
-    setProcessing(true);
-    setOutputVideoUrl("");
-    try {
-      if (!inputVideo) {
-        setError("Please upload a video file.");
-        setLoading(false);
-        setProcessing(false);
-        return;
-      }
-      const formData = new FormData();
-      formData.append("video", inputVideo);
-      formData.append("conf", conf.toString());
-      const res = await fetch("/api/hazard-mapping", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Prediction failed");
-      setOutputVideoUrl(data.output);
-    } catch (err: any) {
-      setError(err?.message || "Prediction failed.");
-    } finally {
+const handlePredict = async () => {
+  setError("");
+  setLoading(true);
+  setProcessing(true);
+  setOutputVideoUrl("");
+
+  try {
+    if (!inputVideo) {
+      setError("Please upload a video file.");
       setLoading(false);
       setProcessing(false);
+      return;
     }
-  };
+
+    const videoUrl = await uploadVideoToSupabase(inputVideo);
+
+    const res = await fetch("/api/hazard-mapping", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        videoUrl,
+        conf,
+      }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Prediction failed");
+    setOutputVideoUrl(data.output); // make sure your API returns `.output`
+  } catch (err: any) {
+    setError(err?.message || "Prediction failed.");
+  } finally {
+    setLoading(false);
+    setProcessing(false);
+  }
+};
 
   React.useEffect(() => {
     if (inputVideoUrl && inputVideoRef.current && hasUploaded && !processing && !outputVideoUrl) {
