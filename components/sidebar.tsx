@@ -77,6 +77,12 @@ export function Sidebar({ className }: SidebarProps) {
       href: "/deployments",
       active: pathname === "/deployments",
     },
+    {
+      label: "Crowdfunding",
+      icon: BarChart3, // You can replace with a more suitable icon if desired
+      href: "/crowdfunding",
+      active: pathname === "/crowdfunding",
+    },
   ]
 
   const deviceTypes = [
