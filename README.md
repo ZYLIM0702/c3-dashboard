@@ -1,4 +1,8 @@
-# 🌐 HUB C3 Platform & Dashboard
+# HUB C3 Platform & Dashboard
+
+<p align="center"> <img src="public/android-chrome-192x192.png" alt="HUB Logo" width="150" /> </p> <p align="center"> <a href="https://github.com/ZYLIM0702/c3-dashboard/issues"> <img src="https://img.shields.io/github/issues/ZYLIM0702/c3-dashboard" alt="Open Issues" /> </a> <a href="https://github.com/ZYLIM0702/c3-dashboard/stargazers"> <img src="https://img.shields.io/github/stars/ZYLIM0702/c3-dashboard?style=social" alt="GitHub Stars" /> </a> <a href="LICENSE"> <img src="https://img.shields.io/badge/license-MIT-green" alt="License: MIT" /> </a> </p>
+<p align="center"> <img src="https://img.shields.io/badge/Next.js-black?logo=next.js&logoColor=white" alt="Next.js" /> <img src="https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=white" alt="React" /> <img src="https://img.shields.io/badge/Flutter-02569B?logo=flutter&logoColor=white" alt="Flutter" /> <img src="https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white" alt="Supabase" /> <img src="https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white" alt="FastAPI" /> <img src="https://img.shields.io/badge/Apache_Kafka-000000?logo=apachekafka&logoColor=white" alt="Apache Kafka" /> <img src="https://img.shields.io/badge/Apache_Flink-0082A9?logo=apacheflink&logoColor=white" alt="Apache Flink" /> <img src="https://img.shields.io/badge/MLflow-0052EE?logo=mlflow&logoColor=white" alt="MLflow" /> <img src="https://img.shields.io/badge/KServe-3F51B5?logo=kubernetes&logoColor=white" alt="KServe" /> <img src="https://img.shields.io/badge/Prometheus-E6522C?logo=prometheus&logoColor=white" alt="Prometheus" /> <img src="https://img.shields.io/badge/Grafana-F46800?logo=grafana&logoColor=white" alt="Grafana" /> <img src="https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white" alt="Docker" /> <img src="https://img.shields.io/badge/Kubernetes-326CE5?logo=kubernetes&logoColor=white" alt="Kubernetes" /> <img src="https://img.shields.io/badge/LoRaWAN-FF6600?logo=lorawan&logoColor=white" alt="LoRaWAN" /> </p>
+
 
 > **Humanitarian Unified Backbone (HUB) Command & Control Center**  
 > Next-generation open-source platform for resilient, real-time, and secure field operations.
@@ -52,6 +56,25 @@ How can disaster response systems overcome the lack of data integration, real-ti
 - **Observability & Ops:** Prometheus → Grafana dashboards + ELK/EFK for logs and metrics.
 
 **[Insert Figure: Full Architecture Diagram for Command & Control Center (C3)]**
+
+---
+
+## Mobile App
+
+The HUB C3 ecosystem includes a cross-platform mobile app for field operators and civilians.
+
+- **Repository:** [hub-app (GitHub)](https://github.com/ZYLIM0702/hub-app)
+- **Features:**
+  - Real-time alerts and notifications
+  - Device registration and QR onboarding
+  - Peer-to-peer LoRa messaging
+  - Live video streaming from field devices
+  - Map view for situational awareness
+  - Multi-language support
+- **Tech Stack:** Flutter (Dart), supporting Android and iOS
+- **Integration:** Connects to the C3 backend and dashboard for seamless data flow and operations.
+
+See the [hub-app repository](https://github.com/ZYLIM0702/hub-app) for source code, setup, and documentation.
 
 ---
 
@@ -109,7 +132,8 @@ c3-dashboard/
 ├── components/    # UI components
 ├── services/      # Supabase and backend service code
 ├── public/        # Static assets
-└── styles/        # Tailwind CSS
+├── styles/        # Tailwind CSS
+└── [hub-app/](https://github.com/ZYLIM0702/hub-app)   # Mobile app (Flutter, separate repo)
 ```
 
 ---
@@ -119,7 +143,7 @@ c3-dashboard/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_ORG/c3-dashboard.git
+git clone https://github.com/ZYLIM0702/c3-dashboard.git
 cd c3-dashboard
 ```
 
@@ -175,6 +199,7 @@ uvicorn main:app --reload
 - [Backend API](./c3-sdk/backend/README.md)
 - [Supabase Schema](./c3-sdk/backend/README.md)
 - [Flutter SDK](./c3-sdk/flutter/README.md)
+- [Mobile App (hub-app)](https://github.com/ZYLIM0702/hub-app)
 
 ---
 
