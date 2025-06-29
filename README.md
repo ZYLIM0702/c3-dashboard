@@ -55,8 +55,6 @@ How can disaster response systems overcome the lack of data integration, real-ti
 - **C3 Dashboard & Mobile App:** Next.js dashboard, Flutter/React Native mobile clients for operators and civilians.
 - **Observability & Ops:** Prometheus → Grafana dashboards + ELK/EFK for logs and metrics.
 
-**[Insert Figure: Full Architecture Diagram for Command & Control Center (C3)]**
-
 ---
 
 ## Mobile App
@@ -78,7 +76,9 @@ See the [hub-app repository](https://github.com/ZYLIM0702/hub-app) for source co
 
 ---
 
-##ML/AI Analytics Pipeline & Integration
+## ML/AI Analytics Pipeline & Integration
+
+![demo](https://github.com/user-attachments/assets/1d48c7fb-d812-4d47-ac65-1807f99b108b)
 
 - **Data Collection:** Real-time telemetry from all field devices (sensors, wearables, drones, helmets) ingested via edge and cloud brokers.
 - **Stream & Batch Processing:** Data flows through Kafka, processed in real-time (Flink/Spark) and batch (MLflow, custom models).
@@ -88,8 +88,6 @@ See the [hub-app repository](https://github.com/ZYLIM0702/hub-app) for source co
   - Backend exposes `/ml/analytics` endpoints for device- and fleet-level analytics.
   - SDKs and dashboard fetch and display ML results in real time.
 - **Scalability:** The pipeline is designed for future scaling to millions of devices and multi-region deployments, with modular microservices and cloud-native orchestration.
-
-**[Insert Figure: ML/AI Analytics Pipeline Diagram]**
 
 ---
 
